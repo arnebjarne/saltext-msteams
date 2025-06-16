@@ -62,9 +62,7 @@ def post_card(name, message, hook_url=None, title=None, theme_color=None):
     ret = {"name": name, "changes": {}, "result": False, "comment": ""}
 
     if __opts__["test"]:
-        ret["comment"] = "The following message is to be sent to Teams: {}".format(
-            message
-        )
+        ret["comment"] = f"The following message is to be sent to Teams: {message}"
         ret["result"] = None
         return ret
 
@@ -86,8 +84,6 @@ def post_card(name, message, hook_url=None, title=None, theme_color=None):
             ret["result"] = True
             ret["comment"] = f"Sent message: {name}"
         else:
-            ret["comment"] = "Failed to send message ({}): {}".format(
-                result["message"], name
-            )
+            ret["comment"] = "Failed to send message ({}): {}".format(result["message"], name)
 
     return ret

@@ -1,21 +1,16 @@
+from unittest.mock import MagicMock
+from unittest.mock import patch
+
 import pytest
 
-import salt.modules.config as config
-import salt.modules.msteams as msteams
-from tests.support.mock import MagicMock, patch
+from saltext.msteams.modules import msteams
+
+# from salt.modules import config
 
 
 @pytest.fixture
-def configure_loader_modules(minion_opts):
-    minion_opts.update({"msteams": {"hook_url": "https://example.com/web_hook"}})
-    msteams_obj = {
-        msteams: {"__opts__": minion_opts, "__salt__": {"config.get": config.get}},
-        config: {
-            "__opts__": minion_opts,
-            "__grains__": {},
-        },
-    }
-    return msteams_obj
+def configure_loader_modules(autouse=True):
+    return {msteams: {}}
 
 
 def test_post_card():

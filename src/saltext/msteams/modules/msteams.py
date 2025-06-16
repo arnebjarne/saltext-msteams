@@ -68,7 +68,32 @@ def post_card(message, hook_url=None, title=None, theme_color=None):
     if not message:
         log.error("message is a required option.")
 
-    payload = {"text": message, "title": title, "themeColor": theme_color}
+    payload = {
+        "type": "message",
+        "attachments": [
+            {
+                "contentType": "application/vnd.microsoft.card.adaptive",
+                "contentUrl": None,
+                "content": {
+                    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                    "type": "AdaptiveCard",
+                    "version": "1.2",
+                    "msteams": {"width": "Full"},
+                    "body": [
+                        {
+                            "type": "TextBlock",
+                            "text": title,
+                            "color": theme_color,
+                            "weight": "bolder",
+                            "size": "large",
+                            "wrap": True,
+                        },
+                        {"type": "CodeBlock", "codeSnippet": message, "language": "PlainText"},
+                    ],
+                },
+            }
+        ],
+    }
 
     headers = {
         "Content-Type": "application/json",
@@ -82,7 +107,7 @@ def post_card(message, hook_url=None, title=None, theme_color=None):
         status=True,
     )
 
-    if result["status"] <= 201:
+    if result["status"] <= 202:
         return True
     else:
         return {"res": False, "message": result.get("body", result["status"])}
